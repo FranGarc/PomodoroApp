@@ -3,8 +3,8 @@ package com.franciscogarciagarzon.pomodoroapp.data.device
 import com.franciscogarciagarzon.pomodoroapp.data.SessionManagerContract
 import com.franciscogarciagarzon.pomodoroapp.data.model.Session
 
-object SessionManager : SessionManagerContract {
-    private val currentSession: Session = Session()
+class SessionManager(private val currentSession: Session = Session()) : SessionManagerContract {
+
     override fun addCompletedPomodoro() {
         currentSession.addCompletedPomodoro()
     }

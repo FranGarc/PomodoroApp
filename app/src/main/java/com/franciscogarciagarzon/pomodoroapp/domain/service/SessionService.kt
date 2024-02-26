@@ -4,7 +4,7 @@ import com.franciscogarciagarzon.pomodoroapp.data.SessionManagerContract
 import com.franciscogarciagarzon.pomodoroapp.data.device.SessionManager
 import com.franciscogarciagarzon.pomodoroapp.domain.usecase.SessionUseCase
 
-class SessionService(private val sessionManager: SessionManagerContract = SessionManager) : SessionUseCase {
+class SessionService(private val sessionManager: SessionManagerContract = SessionManager()) : SessionUseCase {
     override fun addCompletedPomodoro() {
         sessionManager.addCompletedPomodoro()
     }
