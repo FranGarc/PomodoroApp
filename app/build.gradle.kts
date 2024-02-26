@@ -1,6 +1,10 @@
 plugins {
+
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    id("de.mannodermaus.android-junit5") version "1.9.3.0"
 }
 
 android {
@@ -43,7 +47,25 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    // dependency injection
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    kapt("com.google.dagger:hilt-compiler:2.48.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+    // Test
+    testImplementation("com.willowtreeapps.assertk:assertk:0.28.0")
     testImplementation("junit:junit:4.13.2")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.3")
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    add("androidTestImplementation", platform("androidx.compose:compose-bom:2022.10.00"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
