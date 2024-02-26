@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 class TimeSlotServiceTest {
     lateinit var sessionUseCase: SessionUseCase
-    lateinit var  timeSlotUsecase: TimeSlotUseCase
+    lateinit var timeSlotUsecase: TimeSlotUseCase
     private var initialCompletedPomodoros: Int = -1
     private var initialInterruptedPomodoros: Int = -1
     private var initialLongBreaks: Int = -1
@@ -128,7 +128,7 @@ class TimeSlotServiceTest {
     }
 
     @Test
-    fun `when session has N sets of 4 completed pomodoros and less than N Long Breaks, nextTimeSlot returns LongBreak `() {
+    fun `when session has N sets of 4 completed pomodoros and less than N Long Breaks, nextTimeSlot returns LongBreak for currentTimeSlot Pomodoro `() {
         val currentTimeSlot = TimeSlot.Pomodoro
         val localSession1 = Session(_numberOfCompletedPomodoros = 4, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 0, _numberOfShortBreaks = 3)
         val localSession2 = Session(_numberOfCompletedPomodoros = 8, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 1, _numberOfShortBreaks = 6)
@@ -151,7 +151,7 @@ class TimeSlotServiceTest {
     }
 
     @Test
-    fun `when session has N sets of 4 completed pomodoros and  N Long Breaks, nextTimeSlot returns ShortBreak `() {
+    fun `when session has N sets of 4 completed pomodoros and  N Long Breaks, nextTimeSlot returns ShortBreak for currentTimeSlot Pomodoro`() {
         val currentTimeSlot = TimeSlot.Pomodoro
         val localSession1 = Session(_numberOfCompletedPomodoros = 4, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 1, _numberOfShortBreaks = 3)
         val localSession2 = Session(_numberOfCompletedPomodoros = 8, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 2, _numberOfShortBreaks = 6)
@@ -174,12 +174,35 @@ class TimeSlotServiceTest {
     }
 
     @Test
-    fun `when session does not have full sets of 4 completed pomodoros, nextTimeSlot returns ShortBreak `() {
-        val currentTimeSlot = TimeSlot.Pomodoro
+    fun `nextTimeSlot returns Pomodoro for currentTimeSlot Short Break, independent of the stats `() {
+        val currentTimeSlot = TimeSlot.Break.ShortBreak
         val localSession1 = Session(_numberOfCompletedPomodoros = 3, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 0, _numberOfShortBreaks = 2)
         val localSession2 = Session(_numberOfCompletedPomodoros = 7, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 1, _numberOfShortBreaks = 5)
         val localSession3 = Session(_numberOfCompletedPomodoros = 1, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 2, _numberOfShortBreaks = 8)
-        val expectedResult = TimeSlot.Break.ShortBreak
+        val expectedResult = TimeSlot.Pomodoro
+
+        val timeSlotService1 = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager(currentSession = localSession1)))
+        val timeSlotService2 = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager(currentSession = localSession2)))
+        val timeSlotService3 = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager(currentSession = localSession3)))
+
+        val result1 = timeSlotService1.nextTimeSlot(currentTimeSlot = currentTimeSlot)
+        val result2 = timeSlotService2.nextTimeSlot(currentTimeSlot = currentTimeSlot)
+        val result3 = timeSlotService3.nextTimeSlot(currentTimeSlot = currentTimeSlot)
+
+        assertAll {
+            assertThat(result1).isInstanceOf(expectedResult.javaClass)
+            assertThat(result2).isInstanceOf(expectedResult.javaClass)
+            assertThat(result3).isInstanceOf(expectedResult.javaClass)
+        }
+    }
+
+    @Test
+    fun `nextTimeSlot returns Pomodoro for currentTimeSlot Long Break, independent of the stats `() {
+        val currentTimeSlot = TimeSlot.Break.LongBreak
+        val localSession1 = Session(_numberOfCompletedPomodoros = 3, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 0, _numberOfShortBreaks = 2)
+        val localSession2 = Session(_numberOfCompletedPomodoros = 7, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 1, _numberOfShortBreaks = 5)
+        val localSession3 = Session(_numberOfCompletedPomodoros = 1, _numberOfInterruptedPomodoros = 0, _numberOfLongBreaks = 2, _numberOfShortBreaks = 8)
+        val expectedResult = TimeSlot.Pomodoro
 
         val timeSlotService1 = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager(currentSession = localSession1)))
         val timeSlotService2 = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager(currentSession = localSession2)))
