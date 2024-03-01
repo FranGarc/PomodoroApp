@@ -1,10 +1,12 @@
 package com.franciscogarciagarzon.pomodoroapp.domain.service
 
 import com.franciscogarciagarzon.pomodoroapp.data.SessionManagerContract
-import com.franciscogarciagarzon.pomodoroapp.data.device.SessionManager
 import com.franciscogarciagarzon.pomodoroapp.domain.usecase.SessionUseCase
+import javax.inject.Inject
 
-class SessionService(private val sessionManager: SessionManagerContract = SessionManager()) : SessionUseCase {
+class SessionService
+@Inject
+constructor(private val sessionManager: SessionManagerContract) : SessionUseCase {
     override fun addCompletedPomodoro() {
         sessionManager.addCompletedPomodoro()
     }

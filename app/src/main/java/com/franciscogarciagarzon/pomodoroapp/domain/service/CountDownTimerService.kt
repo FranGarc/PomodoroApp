@@ -2,15 +2,17 @@ package com.franciscogarciagarzon.pomodoroapp.domain.service
 
 
 import com.franciscogarciagarzon.pomodoroapp.data.CountDownTimerContract
-import com.franciscogarciagarzon.pomodoroapp.data.device.PomodoroCountDownTimerObject
 import com.franciscogarciagarzon.pomodoroapp.domain.model.Status
 import com.franciscogarciagarzon.pomodoroapp.domain.model.TimeSlot
 import com.franciscogarciagarzon.pomodoroapp.domain.usecase.CountDownTimerUseCase
 import com.franciscogarciagarzon.pomodoroapp.domain.usecase.TimeSlotUseCase
+import javax.inject.Inject
 
-class CountDownTimerService(
-    private val timeSlotUseCase: TimeSlotUseCase = TimeSlotService(),
-    private val timer: CountDownTimerContract = PomodoroCountDownTimerObject
+class CountDownTimerService
+@Inject
+constructor(
+    private val timeSlotUseCase: TimeSlotUseCase,
+    private val timer: CountDownTimerContract
 
 ) : CountDownTimerUseCase {
     private lateinit var currentTimeSlot: TimeSlot

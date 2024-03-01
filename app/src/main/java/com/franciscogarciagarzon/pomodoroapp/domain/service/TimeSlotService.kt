@@ -4,9 +4,11 @@ import com.franciscogarciagarzon.pomodoroapp.domain.model.TimeSlot
 import com.franciscogarciagarzon.pomodoroapp.domain.model.WrongTimeSlotException
 import com.franciscogarciagarzon.pomodoroapp.domain.usecase.SessionUseCase
 import com.franciscogarciagarzon.pomodoroapp.domain.usecase.TimeSlotUseCase
+import javax.inject.Inject
 
-class TimeSlotService(
-    private val sessionService: SessionUseCase = SessionService()
+class TimeSlotService
+@Inject constructor(
+    private val sessionService: SessionUseCase
 ) : TimeSlotUseCase {
 
     override fun finish(timeSlot: TimeSlot) {

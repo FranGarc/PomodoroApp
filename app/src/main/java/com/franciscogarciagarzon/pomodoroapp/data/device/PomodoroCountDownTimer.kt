@@ -4,8 +4,8 @@ import com.franciscogarciagarzon.pomodoroapp.data.CountDownTimerContract
 import com.franciscogarciagarzon.pomodoroapp.domain.model.TimeSlot
 import com.franciscogarciagarzon.pomodoroapp.domain.model.durationInMilliseconds
 
-object PomodoroCountDownTimerObject : PomodoroCountDownTimer()
-abstract class PomodoroCountDownTimer : CountDownTimerContract {
+
+class PomodoroCountDownTimer() : CountDownTimerContract {
     private lateinit var timer: KotlinCountDownTimer
     private lateinit var onFinishedLambda: () -> Unit
 
