@@ -22,7 +22,7 @@ class TimeSlotServiceTest {
 
     @BeforeEach
     fun setUp() {
-        sessionUseCase = SessionService()
+        sessionUseCase = SessionService(sessionManager = SessionManager())
         timeSlotUsecase = TimeSlotService(sessionUseCase)
 
         initialCompletedPomodoros = sessionUseCase.numberOfCompletedPomodoro()

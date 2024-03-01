@@ -3,8 +3,10 @@ package com.franciscogarciagarzon.pomodoroapp.domain.service
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.franciscogarciagarzon.pomodoroapp.data.CountDownTimerContract
+import com.franciscogarciagarzon.pomodoroapp.data.device.SessionManager
 import com.franciscogarciagarzon.pomodoroapp.domain.model.Status
 import com.franciscogarciagarzon.pomodoroapp.domain.model.TimeSlot
+import com.franciscogarciagarzon.pomodoroapp.domain.usecase.TimeSlotUseCase
 import org.junit.jupiter.api.Test
 
 object TestTimer : CountDownTimerContract {
@@ -25,8 +27,6 @@ object TestTimer : CountDownTimerContract {
     override fun addOnFinishedLambda(onFinishedLambda: () -> Unit) {
         this.onFinishedLambda = onFinishedLambda
     }
-
-
 }
 
 class CountDownTimerServiceTest {
@@ -37,7 +37,8 @@ class CountDownTimerServiceTest {
     @Test
     fun `Initial Status is Idle`() {
         val expectedStatus: Status = Status.Idle
-        val cdtService = CountDownTimerService(timer = timer)
+        val timeSlotUseCase: TimeSlotUseCase = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager()))
+        val cdtService = CountDownTimerService(timer = timer, timeSlotUseCase = timeSlotUseCase)
         val currentStatus: Status = cdtService.currentStatus()
         assertThat(currentStatus).isEqualTo(expectedStatus)
     }
@@ -46,7 +47,8 @@ class CountDownTimerServiceTest {
     fun `Start changes status to Running `() {
         val timeSlot = TimeSlot.Pomodoro
         val expectedStatus: Status = Status.Running(timeSlot)
-        val cdtService = CountDownTimerService(timer = timer)
+        val timeSlotUseCase: TimeSlotUseCase = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager()))
+        val cdtService = CountDownTimerService(timer = timer, timeSlotUseCase = timeSlotUseCase)
         cdtService.start(timeSlot)
         val currentStatus: Status = cdtService.currentStatus()
         assertThat(currentStatus).isEqualTo(expectedStatus)
@@ -56,7 +58,8 @@ class CountDownTimerServiceTest {
     fun `Reset after Start changes status back to Idle `() {
         val timeSlot = TimeSlot.Pomodoro
         val expectedStatus: Status = Status.Idle
-        val cdtService = CountDownTimerService(timer = timer)
+        val timeSlotUseCase: TimeSlotUseCase = TimeSlotService(sessionService = SessionService(sessionManager = SessionManager()))
+        val cdtService = CountDownTimerService(timer = timer, timeSlotUseCase = timeSlotUseCase)
         cdtService.start(timeSlot)
         cdtService.reset()
         val currentStatus: Status = cdtService.currentStatus()
